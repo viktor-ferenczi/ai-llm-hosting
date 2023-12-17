@@ -60,7 +60,7 @@ async def check() -> bool:
 
 def restart(script_path: str):
     print(f'{timestamp()}: Restarting')
-    if not Popen([script_path], shell=True).wait(RESTART_TIMEOUT):
+    if Popen([script_path], shell=True).wait(RESTART_TIMEOUT):
         print(f'{timestamp()}: Failed to restart')
 
 
