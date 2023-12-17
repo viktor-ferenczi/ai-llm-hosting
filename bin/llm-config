@@ -1,0 +1,24 @@
+#!/bin/bash
+# LLM selection
+
+# Models directory
+export MODELS_DIR="$HOME/models"
+
+# API: oai,api
+export LLM_API="oai"
+
+# Model: codellama-13, codellama-34, deepseek-33
+export LLM_MODEL="deepseek-33"
+
+# Logging
+export LLM_LOG_PATH="$HOME/log/llm-engine.log"
+
+# Scripts
+export LLM_RUN_SCRIPT="run-$LLM_API-$LLM_MODEL"
+
+# API server module
+if [ "$LLM_API" == "oai" ]; then
+    export LLM_API_SERVER_MODULE='vllm.entrypoints.openai.api_server'
+else
+    export LLM_API_SERVER_MODULE='vllm.entrypoints.api_server'
+fi

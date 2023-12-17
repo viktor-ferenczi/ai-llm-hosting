@@ -1,0 +1,2 @@
+#!/bin/bash
+/usr/bin/python3 -O -u $HOME/bin/keepalive.py $HOME/bin/llm-restart

@@ -1,0 +1,21 @@
+#!/bin/bash
+set -euo pipefail
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+. "$SCRIPT_DIR/llm-config"
+
+# Using vLLM latest main to have all the fixes
+. ~/dep/vllm/venv/bin/activate
+
+python -O -u -m vllm.entrypoints.openai.api_server \
+  --model=$MODELS_DIR/TheBloke/deepseek-coder-33B-instruct-AWQ \
+  --quantization=awq \
+  --dtype=float16 \
+  --served-model-name=model \
+  --host=0.0.0.0 \
+  --port=8000 \
+  --max-model-len=16384 \
+  --max-num-seqs=16 \
+  --tensor-parallel-size=2 \
+  --swap-space=8 \
+  --disable-log-requests

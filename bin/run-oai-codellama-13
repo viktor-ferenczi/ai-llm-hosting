@@ -1,0 +1,27 @@
+#!/bin/bash
+set -euo pipefail
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+. "$SCRIPT_DIR/llm-config"
+
+# Must use 0.2.4 due to vLLM bug: https://github.com/vllm-project/vllm/issues/2136
+. ~/env/vllm-0.2.4/bin/activate
+
+python -O -u -m vllm.entrypoints.openai.api_server \
+  --model=$MODELS_DIR/TheBloke/CodeLlama-13B-Instruct-fp16 \
+  --chat-template=$SCRIPT_DIR/chat-templates/llama-2-chat.jinja \
+  --served-model-name=model \
+  --host=0.0.0.0 \
+  --port=8000 \
+  --max-model-len=16384 \
+  --max-num-seqs=16 \
+  --tensor-parallel-size=2 \
+  --swap-space=8 \
+  --gpu-memory-utilization=0.95 \
+  --disable-log-requests
+
+# DO NOT USE, it will fail:
+#  --tokenizer=hf-internal-testing/llama-tokenizer \
+
+# Not required anymore:
+#  --trust-remote-code \

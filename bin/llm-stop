@@ -1,0 +1,15 @@
+#!/bin/bash
+set -euo pipefail
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+. "$SCRIPT_DIR/llm-config"
+
+if pgrep -f "run-$LLM_API-" || pgrep -f "$LLM_API_SERVER_MODULE"; then
+    pkill -9 -f "run-$LLM_API-" || true
+    pkill -9 -f "$LLM_API_SERVER_MODULE" || true
+    echo 'Stopped'
+else
+    echo 'Not running'
+fi
+
+exit 0

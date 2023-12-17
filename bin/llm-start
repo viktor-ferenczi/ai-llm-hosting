@@ -1,0 +1,14 @@
+#!/bin/bash
+set -euo pipefail
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+. "$SCRIPT_DIR/llm-config"
+
+if pgrep -f "run-$LLM_API-" || pgrep -f "$LLM_API_SERVER_MODULE"; then
+    echo 'Already running'
+else
+    nohup bash -l "$LLM_RUN_SCRIPT" >$LLM_LOG_PATH 2>&1 &
+    echo 'Started'
+fi
+
+exit 0
