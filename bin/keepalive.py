@@ -19,7 +19,6 @@ from openai import AsyncOpenAI, APIError
 
 AIDEV_OPENAI_BASE_URL = os.getenv('AIDEV_OPENAI_BASE_URL', 'http://127.0.0.1:8000/v1')
 AIDEV_OPENAI_KEY = os.getenv('AIDEV_OPENAI_KEY', 'NO-KEY')
-AIDEV_OPENAI_MODEL = os.getenv('AIDEV_OPENAI_MODEL', 'model')
 
 CHECK_TIMOUT = 60
 CHECK_PERIOD = 120
@@ -39,7 +38,7 @@ async def check() -> bool:
                 {"role": "system", "content": "You are a helpful AI assistant and give concise answers."},
                 {"role": "user", "content": '1 + 1 = ?'}
             ],
-            model=AIDEV_OPENAI_MODEL,
+            model='model',
             max_tokens=10,
             temperature=0.2,
         )
