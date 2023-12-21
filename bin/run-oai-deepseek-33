@@ -4,8 +4,7 @@ set -euo pipefail
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 . "$SCRIPT_DIR/llm-config"
 
-# Using vLLM latest main to have all the fixes
-. ~/dep/vllm/venv/bin/activate
+. ~/env/vllm-0.2.5/bin/activate
 
 python -O -u -m vllm.entrypoints.openai.api_server \
   --model=$MODELS_DIR/TheBloke/deepseek-coder-33B-instruct-AWQ \
