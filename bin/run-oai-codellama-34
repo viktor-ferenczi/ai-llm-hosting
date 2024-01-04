@@ -19,7 +19,7 @@ python -O -u -m vllm.entrypoints.openai.api_server \
   --max-num-seqs=16 \
   --tensor-parallel-size=2 \
   --swap-space=8 \
-  --gpu-memory-utilization=0.8 \
+  --gpu-memory-utilization=0.95 \
   --disable-log-requests
 
 # DO NOT USE, it will fail:
