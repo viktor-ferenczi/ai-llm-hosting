@@ -4,7 +4,7 @@ set -euo pipefail
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 . "$SCRIPT_DIR/llm-config"
 
-. ~/env/vllm-0.2.5/bin/activate
+. ~/env/vllm-0.2.7/bin/activate
 
 python -O -u -m vllm.entrypoints.openai.api_server \
   --model=$MODELS_DIR/TheBloke/deepseek-coder-33B-instruct-AWQ \
@@ -17,4 +17,6 @@ python -O -u -m vllm.entrypoints.openai.api_server \
   --max-num-seqs=16 \
   --tensor-parallel-size=2 \
   --swap-space=8 \
+  --gpu-memory-utilization=0.95 \
+  --enforce-eager \
   --disable-log-requests
