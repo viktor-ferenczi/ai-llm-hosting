@@ -15,10 +15,10 @@ if ! [ -d /workspace/env/vllm-0.2.7 ]; then
     mkdir -p /workspace/env
     cd /workspace/env
     python -m venv vllm-0.2.7
-	  . /workspace/env/vllm-0.2.7/bin/activate
-	  pip install vllm==0.2.7
-	  pip install huggingface_hub
-	  cd /workspace
+    . /workspace/env/vllm-0.2.7/bin/activate
+    pip install vllm==0.2.7
+    pip install huggingface_hub
+    cd /workspace
 else
     . /workspace/env/vllm-0.2.7/bin/activate
 fi
