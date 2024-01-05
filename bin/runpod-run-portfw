@@ -1,3 +1,4 @@
 #!/bin/bash
 POD_SSH_IP=$1
-ssh -4 -p 22035 -L 0.0.0.0:8000:127.0.0.1:8888 root@$POD_SSH_IP /bin/bash /workspace/run.sh
+POD_SSH_PORT=$2
+ssh -4 -p $POD_SSH_PORT -L 0.0.0.0:8000:127.0.0.1:8888 root@$POD_SSH_IP /bin/bash /workspace/run.sh
