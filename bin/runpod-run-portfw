@@ -1,0 +1,3 @@
+#!/bin/bash
+POD_SSH_IP=$1
+ssh -4 -p 22035 -L 8000:127.0.0.1:8888 root@$POD_SSH_IP /bin/bash /workspace/run.sh

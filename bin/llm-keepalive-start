@@ -1,0 +1,2 @@
+#!/bin/bash
+nohup /usr/bin/python3 -O -u $HOME/bin/keepalive.py $HOME/bin/llm-restart >>~/log/keepalive.log 2>&1
