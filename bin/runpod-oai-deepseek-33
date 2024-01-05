@@ -3,6 +3,9 @@ set -euo pipefail
 
 cd /workspace
 
+pkill -9 -f python 2>/dev/null || true
+pkill -9 -f ray 2>/dev/null || true
+
 MODEL="deepseek-ai/deepseek-coder-33b-instruct"
 
 export HF_HOME=/workspace/hf/
@@ -45,8 +48,11 @@ python -O -u -m vllm.entrypoints.openai.api_server \
   --swap-space=1 \
   --gpu-memory-utilization=0.95 \
   --enforce-eager \
-  --disable-log-requests
+  --disable-log-requests \
+  || true
 
+pkill -9 -f python 2>/dev/null || true
+pkill -9 -f ray 2>/dev/null || true
 
 # Using: --max-parallel-loading-workers=4 \
 # Causes:
