@@ -1,0 +1,23 @@
+#!/bin/bash
+set -euo pipefail
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+. "$SCRIPT_DIR/llm-config"
+
+. ~/env/vllm-0.2.7/bin/activate
+
+python -O -u -m vllm.entrypoints.openai.api_server \
+  --model=$MODELS_DIR/01-ai/Yi-34B-Chat-4bits \
+  --chat-template=$SCRIPT_DIR/chat-templates/orca.jinja \
+  --quantization=awq \
+  --dtype=float16 \
+  --served-model-name=model \
+  --host=0.0.0.0 \
+  --port=8000 \
+  --max-model-len=32768 \
+  --max-num-seqs=16 \
+  --tensor-parallel-size=2 \
+  --swap-space=8 \
+  --gpu-memory-utilization=0.95 \
+  --enforce-eager \
+  --disable-log-requests

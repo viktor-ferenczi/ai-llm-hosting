@@ -1,0 +1,29 @@
+{% for message in messages %}
+{% if message['role'] == 'system' %}
+### System Prompt
+{{ message['content']|trim -}}
+
+{% endif %}
+{% if message['role'] == 'user' %}
+### User Message
+{{ message['content']|trim -}}
+{% if not loop.last %}
+
+{% endif %}
+{% elif message['role'] == 'assistant' %}
+### Assistant
+{{ message['content']|trim -}}
+{% if not loop.last %}
+
+{% endif %}
+{% elif message['role'] == 'user_context' %}
+### User Message
+{{ message['content']|trim -}}
+{% if not loop.last %}
+
+{% endif %}
+{% endif %}
+{% endfor %}
+{% if add_generation_prompt and messages[-1]['role'] != 'assistant' %}
+### Assistant
+{% endif %}
