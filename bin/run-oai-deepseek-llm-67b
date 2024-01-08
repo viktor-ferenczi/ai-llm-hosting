@@ -1,0 +1,21 @@
+#!/bin/bash
+set -euo pipefail
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+. "$SCRIPT_DIR/llm-config"
+
+. ~/env/vllm-0.2.4/bin/activate
+
+python -O -u -m vllm.entrypoints.openai.api_server \
+  --model=$MODELS_DIR/TheBloke/deepseek-llm-67b-chat-AWQ \
+  --quantization=awq \
+  --dtype=float16 \
+  --served-model-name=model \
+  --host=0.0.0.0 \
+  --port=8000 \
+  --max-model-len=4096 \
+  --max-num-seqs=16 \
+  --tensor-parallel-size=2 \
+  --swap-space=8 \
+  --gpu-memory-utilization=0.95 \
+  --disable-log-requests

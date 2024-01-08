@@ -7,8 +7,8 @@ export MODELS_DIR="$HOME/models"
 # API: oai,api
 export LLM_API="oai"
 
-# Model: codellama-13b, codellama-34b, phind-codellama-34b, deepseek-33b, yi-6b, yi-34b
-export LLM_MODEL="deepseek-33b"
+# Model: codellama-13b, codellama-34b, phind-codellama-34b, deepseek-coder-33b, deepseek-llm-67b, yi-6b, yi-34b
+export LLM_MODEL="phind-codellama-34b"
 
 # Logging
 export LLM_LOG_PATH="$HOME/log/llm-engine.log"
