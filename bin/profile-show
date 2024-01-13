@@ -1,0 +1,13 @@
+#!/usr/bin/python3
+
+import os
+import pstats
+from pstats import SortKey
+
+PROFILE = os.path.expanduser('~/dep/vllm-contrib/profile.dat')
+
+# SORT_ORDER = SortKey.TIME
+SORT_ORDER = SortKey.CUMULATIVE
+# SORT_ORDER = SortKey.FILENAME
+
+pstats.Stats(PROFILE).strip_dirs().sort_stats(SORT_ORDER).print_stats()
