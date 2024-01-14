@@ -4,15 +4,12 @@ set -euo pipefail
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 . "$SCRIPT_DIR/llm-config"
 
-# Must use 0.2.4 due to vLLM bug: https://github.com/vllm-project/vllm/issues/2136
 . ~/env/vllm-0.2.7/bin/activate
 
 python -O -u -m $LLM_API_SERVER_MODULE \
-  --model=$MODELS_DIR/TheBloke/Phind-CodeLlama-34B-v2-AWQ \
-  --chat-template=$SCRIPT_DIR/chat-templates/phind.jinja \
+  --model=$MODELS_DIR/TheBloke/deepseek-coder-33B-instruct-AWQ \
   --quantization=awq \
   --dtype=float16 \
-  --served-model-name=model \
   --host=0.0.0.0 \
   --port=8000 \
   --max-model-len=16384 \
@@ -22,6 +19,3 @@ python -O -u -m $LLM_API_SERVER_MODULE \
   --gpu-memory-utilization=0.95 \
   --enforce-eager \
   --disable-log-requests
-
-# DO NOT USE, it will fail:
-#  --tokenizer=hf-internal-testing/llama-tokenizer \

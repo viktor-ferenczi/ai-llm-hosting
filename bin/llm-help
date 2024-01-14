@@ -6,4 +6,4 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 . ~/env/vllm-0.2.7/bin/activate
 
-python -O -u -m vllm.entrypoints.openai.api_server --help
+python -O -u -m $LLM_API_SERVER_MODULE --help

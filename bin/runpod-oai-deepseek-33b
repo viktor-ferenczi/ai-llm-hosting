@@ -37,7 +37,7 @@ export RAY_memory_monitor_refresh_ms=0
 export RAY_DISABLE_DOCKER_CPU_WARNING=1
 export PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:256
 
-python -O -u -m vllm.entrypoints.openai.api_server \
+python -O -u -m $LLM_API_SERVER_MODULE \
   --model=$MODEL \
   --served-model-name=model \
   --host=127.0.0.1 \

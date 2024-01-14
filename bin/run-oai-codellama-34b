@@ -7,7 +7,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 # Must use 0.2.4 due to vLLM bug: https://github.com/vllm-project/vllm/issues/2136
 . ~/env/vllm-0.2.4/bin/activate
 
-python -O -u -m vllm.entrypoints.openai.api_server \
+python -O -u -m $LLM_API_SERVER_MODULE \
   --model=$MODELS_DIR/TheBloke/CodeLlama-34B-Instruct-AWQ \
   --chat-template=$SCRIPT_DIR/chat-templates/llama-2-chat.jinja \
   --quantization=awq \

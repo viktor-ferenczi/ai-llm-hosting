@@ -4,8 +4,8 @@
 # Models directory
 export MODELS_DIR="$HOME/models"
 
-# API: oai,api
-export LLM_API="oai"
+# API: api, oai, outlines
+export LLM_API="api"
 
 # Model: codellama-13b, codellama-34b, phind-codellama-34b, deepseek-coder-33b, deepseek-llm-67b, yi-6b, yi-34b
 export LLM_MODEL="deepseek-coder-33b"
@@ -17,8 +17,18 @@ export LLM_LOG_PATH="$HOME/log/llm-engine.log"
 export LLM_RUN_SCRIPT="run-$LLM_API-$LLM_MODEL"
 
 # API server module
-if [ "$LLM_API" == "oai" ]; then
-    export LLM_API_SERVER_MODULE='vllm.entrypoints.openai.api_server'
-else
-    export LLM_API_SERVER_MODULE='vllm.entrypoints.api_server'
-fi
+case "$LLM_API" in
+    api)
+        export LLM_API_SERVER_MODULE='vllm.entrypoints.api_server'
+        ;;
+    oai)
+        export LLM_API_SERVER_MODULE='vllm.entrypoints.openai.api_server'
+        ;;
+    outlines)
+        export LLM_API_SERVER_MODULE='outlines.serve.serve'
+        ;;
+    *)
+        echo "Invalid LLM_API: $LLM_API"
+        exit 1
+        ;;
+esac
