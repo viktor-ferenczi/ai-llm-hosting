@@ -6,6 +6,10 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 . ~/env/outlines/bin/activate
 
+OUTLINES_SOURCE_DIR=$HOME/dep/outlines
+PYTHONPATH=$OUTLINES_SOURCE_DIR
+cd $OUTLINES_SOURCE_DIR
+
 python -O -u -m $LLM_API_SERVER_MODULE \
   --model=$MODELS_DIR/TheBloke/deepseek-coder-33B-instruct-AWQ \
   --quantization=awq \
