@@ -4,4 +4,4 @@ set -euo pipefail
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 . "$SCRIPT_DIR/llm-config"
 
-tail -F "$LLM_LOG_PATH"
+tail -n 0 -F "$LLM_LOG_PATH"
