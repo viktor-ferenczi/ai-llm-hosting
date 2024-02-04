@@ -23,9 +23,10 @@ AIDEV_OPENAI_KEY = os.getenv('AIDEV_OPENAI_KEY', 'NO-KEY')
 
 AIDEV_VLLM_BASE_URL = os.getenv('AIDEV_VLLM_BASE_URL', 'http://127.0.0.1:8000')
 
-CHECK_TIMOUT = 60
-CHECK_PERIOD = 120
-RESTART_TIMEOUT = 60
+CHECK_COUNT = 5
+CHECK_TIMOUT = 30
+CHECK_PERIOD = 180
+RESTART_TIMEOUT = 90
 
 
 async def check_openai() -> bool:
@@ -113,7 +114,10 @@ async def main():
         next_check = time() + CHECK_PERIOD
 
         try:
-            if not await check_vllm() and not await check_openai():
+            for _ in range(CHECK_COUNT):
+                if await check_vllm() or await check_openai():
+                    break
+            else:
                 restart(script_path)
         except KeyboardInterrupt:
             break
