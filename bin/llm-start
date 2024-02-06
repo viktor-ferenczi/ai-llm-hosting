@@ -1,6 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
+rm -rf ~/.cache/outlines 2>/dev/null || true
+
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 . "$SCRIPT_DIR/llm-config"
 
