@@ -15,6 +15,7 @@ python -O -u -m $LLM_API_SERVER_MODULE \
   --port=8000 \
   --max-model-len=16384 \
   --max-num-seqs=16 \
+  --tensor-parallel-size=2 \
   --swap-space=8 \
   --gpu-memory-utilization=0.95 \
   --enforce-eager \
