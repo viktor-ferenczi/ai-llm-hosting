@@ -1,0 +1,22 @@
+#!/bin/bash
+set -euo pipefail
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+. "$SCRIPT_DIR/llm-config"
+
+. ~/env/outlines/bin/activate
+
+PYTHONPATH=$OUTLINES_SOURCE_DIR
+cd $OUTLINES_SOURCE_DIR
+
+python -O -u -m $LLM_API_SERVER_MODULE \
+  --model=$MODELS_DIR/LargeWorldModel/LWM-Text-Chat-1M \
+  --host=0.0.0.0 \
+  --port=8000 \
+  --max-model-len=1048576 \
+  --max-num-seqs=1 \
+  --tensor-parallel-size=2 \
+  --swap-space=8 \
+  --gpu-memory-utilization=0.95 \
+  --enforce-eager \
+  --disable-log-requests
