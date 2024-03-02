@@ -1,0 +1,63 @@
+#!/bin/bash
+set -euo pipefail
+
+cd /workspace
+
+pkill -9 -f python 2>/dev/null || true
+pkill -9 -f ray 2>/dev/null || true
+
+MODEL="casperhansen/mixtral-instruct-awq"
+
+export HF_HOME=/workspace/hf/
+mkdir -p $HF_HOME
+
+if ! [ -d /workspace/env/vllm-0.3.2 ]; then
+    mkdir -p /workspace/env
+    cd /workspace/env
+    python -m venv vllm-0.3.2
+    . /workspace/env/vllm-0.3.2/bin/activate
+    pip install vllm==0.3.2
+    pip install huggingface_hub
+    cd /workspace
+else
+    . /workspace/env/vllm-0.3.2/bin/activate
+fi
+
+HF_MODEL_DIR=$(python -c "print('$MODEL'.replace('/', '--'))")
+HF_MODEL_PATH="$HF_HOME/hub/models--$HF_MODEL_DIR"
+if ! [ -d $HF_MODEL_PATH ]; then
+    python3 -c "import huggingface_hub; huggingface_hub.snapshot_download(repo_type='model', repo_id='$MODEL')"
+    du -cshL /workspace/hf
+fi
+
+GPU_COUNT=$(nvidia-smi | grep W | grep -c ' / ')
+
+# Lower case is intentional
+export RAY_memory_monitor_refresh_ms=0
+export RAY_DISABLE_DOCKER_CPU_WARNING=1
+export PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:256
+
+python -O -u -m $LLM_API_SERVER_MODULE \
+  --model=$MODEL \
+  --served-model-name=model \
+  --host=127.0.0.1 \
+  --port=8888 \
+  --max-model-len=32768 \
+  --max-num-seqs=16 \
+  --tensor-parallel-size=$GPU_COUNT \
+  --swap-space=1 \
+  --gpu-memory-utilization=0.95 \
+  --enforce-eager \
+  --disable-log-requests \
+  || true
+
+pkill -9 -f python 2>/dev/null || true
+pkill -9 -f ray 2>/dev/null || true
+
+# Using: --max-parallel-loading-workers=4 \
+# Causes:
+#   File "/workspace/env/vllm-0.3.2/lib/python3.10/site-packages/vllm/engine/llm_engine.py", line 249, in _init_workers_ray
+#     self._run_workers(
+#   File "/workspace/env/vllm-0.3.2/lib/python3.10/site-packages/vllm/engine/llm_engine.py", line 780, in _run_workers
+#     raise NotImplementedError(
+# NotImplementedError: max_concurrent_workers is not supported yet.
