@@ -1,0 +1,26 @@
+#!/bin/bash
+set -euo pipefail
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+. "$SCRIPT_DIR/llm-config"
+
+# Standard
+#. ~/env/vllm-0.2.7/bin/activate
+
+# Development (grammar)
+. ~/dep/vllm-contrib/venv/bin/activate
+
+python -O -u -m $LLM_API_SERVER_MODULE \
+  --model=$MODELS_DIR/casperhansen/mixtral-instruct-awq \
+  --quantization=awq \
+  --dtype=float16 \
+  --served-model-name=model \
+  --host=0.0.0.0 \
+  --port=8000 \
+  --max-model-len=32768 \
+  --max-num-seqs=16 \
+  --tensor-parallel-size=2 \
+  --swap-space=8 \
+  --gpu-memory-utilization=0.95 \
+  --enforce-eager \
+  --disable-log-requests
