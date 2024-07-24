@@ -1,0 +1,26 @@
+#!/bin/bash
+set -euo pipefail
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+. "$SCRIPT_DIR/llm-config"
+
+. ~/env/outlines/bin/activate
+
+PYTHONPATH=$OUTLINES_SOURCE_DIR
+cd $OUTLINES_SOURCE_DIR
+
+# Does not work, see: https://github.com/outlines-dev/outlines/issues/535
+python -O -u -m $LLM_API_SERVER_MODULE \
+  --model=$MODELS_DIR/hugging-quants/Meta-Llama-3.1-70B-Instruct-AWQ-INT4 \
+  --quantization=awq \
+  --dtype=float16 \
+  --host=0.0.0.0 \
+  --port=8000 \
+  --max-model-len=12288 \
+  --max-num-seqs=16 \
+  --tensor-parallel-size=2 \
+  --swap-space=8 \
+  --gpu-memory-utilization=0.98 \
+  --enforce-eager \
+  --disable-log-requests \
+  --enable-prefix-caching
